@@ -1,0 +1,83 @@
+
+
+.home-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    justify-content: center;
+    height:fit-content;
+    border-radius: 5px;
+    padding:10px;
+}
+
+/* .home-title-section{
+    display:flex;
+    justify-content: center;
+} */
+
+.home-title-container{
+    font-size: 50px;
+    font-family: 'Arial';
+    font-weight: 700;
+    margin-top:60px;
+}
+
+/* .home-body{
+    border: 1px solid black;
+} */
+
+.home-begin-message-container{
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top:60px;
+}
+
+.home-image-container{
+    display:flex;
+    margin-top:50px;
+    /* border: 1px solid black; */
+}
+
+.home-O-image-container,
+.home-X-image-container{
+    border: 1px solid rgb(236, 227, 227);
+    margin-right: 10px;
+    width:360px;
+    display:flex;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    transition: background-color 0.3s;
+}
+
+.home-X-image-container{
+    margin-right:0px;
+}
+
+
+.home-X-image-container:hover #home-x-image,
+.home-O-image-container:hover #home-o-image{
+    cursor: pointer;
+    filter:  brightness(0) invert(1);
+}
+
+.home-X-image-container:hover{
+    cursor: pointer;
+    background-color: black;
+}
+
+.home-O-image-container:hover{
+    cursor: pointer;
+    background-color: red;
+}
+
+
+#home-o-image,
+#home-x-image{
+    height: 300px;
+    transition: filter 0.3s;
+}
