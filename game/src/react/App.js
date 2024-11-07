@@ -24,7 +24,7 @@ function App() {
     'setPage':setPage,
     'sign': sign,
     'setSign': setSign,
-    'isYourTurn': (playerSign, gameBoard) => isYourTurn(playerSign, gameBoard),
+    'getTurn': getTurn,
     'socket': socket,
     'setSocket': setSocket,
     'antiSign': antiSign,
@@ -33,7 +33,7 @@ function App() {
     'setGameBoard': setGameBoard,
   }
 
-  function isYourTurn(playerSign, gameBoard){
+  function getTurn(gameBoard){
     let countX = 0
     let countO = 0
     gameBoard.forEach((row) =>{
@@ -42,14 +42,10 @@ function App() {
             else if (cell === 'O') countO++;
         })
     })
-    if (countX === countO){
-        if (playerSign === 'X') return true;
-        else return false
+    if (countX >= countO){
+      return 'X'
     }
-    else if (countX > countO){
-        if (playerSign === 'X') return false
-        else return true
-    }
+    return 'O'
   }
 
   return (

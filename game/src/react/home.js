@@ -47,7 +47,7 @@ export default function Home(props){
         }
         props.setAntiSign(antiSign)
         console.log(props)
-        sendMessage({'sign': antiSign, 'isYourTurn': !props.isYourTurn(props.sign, props.gameBoard), 'gameBoard':props.gameBoard})
+        // sendMessage({'sign': antiSign, 'isYourTurn': props.getTurn(props.gameBoard), 'gameBoard':props.gameBoard})
     }
 
     return(
