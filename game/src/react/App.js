@@ -36,16 +36,17 @@ function App() {
   function getTurn(gameBoard){
     let countX = 0
     let countO = 0
+    console.log(gameBoard)
     gameBoard.forEach((row) =>{
         row.forEach((cell) =>{
             if (cell === 'X') countX ++;
             else if (cell === 'O') countO++;
         })
     })
-    if (countX >= countO){
-      return 'X'
+    if (countX > countO){
+      return 'O'
     }
-    return 'O'
+    return 'X'
   }
 
   return (

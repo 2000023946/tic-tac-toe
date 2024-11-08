@@ -9,23 +9,31 @@ import {useState, useEffect} from 'react'
 
 export default function GameBoard(props){
 
-    const [msg, setMsg] = useState('')
+    setTimeout(() =>{
+
+    }, 1000)
+
+    const [socket, setSocket] = useState(new WebSocket('ws://127.0.0.1:8000/ws/algo/'))
+
 
     useEffect(() =>{
         console.log(props.socket, 'socket')
-        const socket = props.socket;
 
         socket.onopen = (event) =>{
             console.log(event)
+            console.log(props)
+            if (props.sign === 'O'){
+                sendMessage({'status':'move', 'sign': props.getTurn(props.gameBoard), 'gameBoard':props.gameBoard})
+            }
         }
 
         socket.onmessage = (event) =>{
             console.log(event)
             const data = JSON.parse(event.data)
             console.log(data)
-            props.setGameBoard(data.gameBoard)
-            console.log(props)
-            setMsg(data.gameBoard)
+            if (data['status'] === 'move'){
+                props.setGameBoard(data['gameBoard'])
+            }
         }
 
         socket.onclose = (event) =>{
@@ -36,20 +44,20 @@ export default function GameBoard(props){
             console.log(event)
         }
 
-        props.setSocket(socket);
+        setSocket(socket);
 
+        return(() =>{
+            socket.close()
+        })
         
-    },[] )
+    },[])
 
 
     function handleClick(i, j){
-        // console.log(msg)
-        // console.log(props.isYourTurn(props.sign, props.gameBoard))
-        // console.log(props.gameBoard)
         console.log(i, j)
-
         console.log(props.getTurn(props.gameBoard))
-        if (props.getTurn(props.gameBoard)){
+        console.log(props.gameBoard)
+        if (props.getTurn(props.gameBoard) === props.sign){
             console.log(i, j)
             const newGrid = [['', '', ''], ['', '', ''], ['', '', '']]
             props.gameBoard.forEach((row, m) =>{
@@ -59,36 +67,28 @@ export default function GameBoard(props){
             })
             newGrid[i][j] = props.sign
             props.setGameBoard(newGrid)
+            sendMessage({'status':'move', 'sign': props.getTurn(newGrid), 'gameBoard':newGrid})
         }
-
-        console.log(props)
-
-        // console.log(event.target)
-        // const newElement = <Image {...{'url':`${props.sign}.png`}}/>
-        // console.log(newElement)
-
-
-        // props.setGameBoard((oldValue) =>{
-            
-        // }) 
-
-        // console.log(grid)
     }
 
-
-    const sendMessage = (data) =>{
-        props.socket.send(JSON.stringify(data))
+    const  sendMessage =(data) =>{
+        socket.send(JSON.stringify(data))
     }
 
-    
+    const isOver = () =>{
+        let count = 0
+        props.gameBoard.forEach( (row)=>{
+            row.forEach((cell) =>{
+                if (cell === 'X' || cell === 'O'){
+                    count ++
+                }
+            })
+        })
+        return count === 9
+    }
 
-    // console.log(grid)
+    console.log(isOver())
 
-    // console.log(props)
-
-    // const log = () =>{
-    //     console.log(props)
-    // }
 
 
     return(
@@ -99,12 +99,13 @@ export default function GameBoard(props){
                 </div>
             </div>
             <div className="game" >
-                {
+                { !isOver() &&
                     props.gameBoard.map((row, i)=>{
                         return row.map((value, j) =>{
                             return (
-                                <div 
+                                <div style={{'fontSize':'120px', 'display':'flex', 'justifyContent':'center', 'alignItems':'center'}}
                                     className="game-grid" key={`${i,j}`} onClick={() => handleClick(i, j)}>
+                                    {value}
                                 </div>
                             )
                         })

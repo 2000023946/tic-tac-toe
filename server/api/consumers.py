@@ -17,17 +17,15 @@ class MyConsumer(AsyncWebsocketConsumer):
         # You can call:
         data = json.loads(text_data)
         print(data)
-        if data['isYourTurn']:
-            game = Game(data['sign'], data['gameBoard'])
+        if data['status'] == 'move':
+            game = Game(data['gameBoard'])
             state = game.play_move()
-            best_move = state.move.pos
-            print(best_move)
-            data['gameBoard'][best_move[0]][best_move[1]] = data['sign']
+            print(state.move)
+            i, j = state.move.pos
+            data['gameBoard'][i][j] = state.move.sign
             print(data['gameBoard'])
             await self.send(text_data=json.dumps({
                 'status':'move',
-                'move': best_move,
-                'sign': data['sign'],
                 'gameBoard':data['gameBoard']
             }))
 
