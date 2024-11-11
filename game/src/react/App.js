@@ -12,6 +12,9 @@ function App() {
 
   const [sign, setSign] = useState('')
 
+  const [opacity, setOpacity] = useState(1)
+
+  const [msg, setMsg] = useState('')
 
   const [socket, setSocket] = useState(undefined)
 
@@ -31,6 +34,10 @@ function App() {
     'setAntiSign': setAntiSign,
     'gameBoard': gameBoard,
     'setGameBoard': setGameBoard,
+    'opacity':opacity,
+    'setOpacity': setOpacity,
+    'msg':msg,
+    'setMsg':setMsg,
   }
 
   function getTurn(gameBoard){
@@ -50,9 +57,9 @@ function App() {
   }
 
   return (
-    <div className="App" >
-      {page === 'home' && <Home {...data}/>}
-      {page === 'gameboard' && <GameBoard {...data}/>}
+    <div className="App" style={{'backgroundColor' : `rgba(28, 210, 28, ${opacity})`}}>
+      {page === 'home' && <Home {...data} />}
+      {page === 'gameboard' && <GameBoard {...data} />}
     </div>
   );
 }

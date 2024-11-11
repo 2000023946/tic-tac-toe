@@ -3,6 +3,8 @@ import json
 
 from .algo import Game
 
+from .algo import get_result
+
 class MyConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         await self.accept()
@@ -20,14 +22,26 @@ class MyConsumer(AsyncWebsocketConsumer):
         if data['status'] == 'move':
             game = Game(data['gameBoard'])
             state = game.play_move()
+            
             print(state.move)
             i, j = state.move.pos
             data['gameBoard'][i][j] = state.move.sign
             print(data['gameBoard'])
-            await self.send(text_data=json.dumps({
-                'status':'move',
-                'gameBoard':data['gameBoard']
-            }))
+            result = get_result(data['gameBoard'])
+            if result == 1 or result == -1:
+                print('game over')
+                sign = 'X' if result == 1 else 'O'
+                print(sign)
+                await self.send(text_data=json.dumps({
+                    'status':'end',
+                    'gameBoard': data['gameBoard'],
+                    'sign': sign,
+                }))
+            else:
+                await self.send(text_data=json.dumps({
+                    'status':'move',
+                    'gameBoard':data['gameBoard']
+                }))
 
     async def disconnect(self, code):
         self.close()

@@ -99,6 +99,7 @@ def play_max(game_board):#player of X
     max = -999
     #look through all the game states and return the minimum game state with the move associated that was made.
     best_state = None
+    print('round1')
     
     copy_game_board = copy.deepcopy(game_board)
     for pos in free_moves(copy_game_board):
@@ -145,23 +146,27 @@ class Game:
             return 'O'
         return 'X'
     
-game_board = [['X', 'X', ''], ['O', '', ''], ['', '', '']]
+game_board = [['X', 'O', ''], ['', '', ''], ['', '', '']]
 
-print(get_result(game_board))
+# print(get_result(game_board))
+
+# print(get_result(game_board))
 
 
 
 
 game = Game(game_board)
-print(game_board)
 
 state = game.play_move()
 
-print(state)
+print(state.state)
 
-print(state.move.pos)
+# print(state.state)
 
-print(state.move.sign)
+
+# print(state.move.pos)
+
+# print(state.move.sign)
 
 
 

@@ -5,6 +5,8 @@ import Image from './image.js'
 
 import {useState, useEffect} from 'react'
 
+import Result from './result.js'
+
 
 
 export default function GameBoard(props){
@@ -33,6 +35,11 @@ export default function GameBoard(props){
             console.log(data)
             if (data['status'] === 'move'){
                 props.setGameBoard(data['gameBoard'])
+            }else if (data['status'] ==='end'){
+                props.setGameBoard(data['gameBoard'])
+                props.setOpacity(0.2)
+                props.setMsg(`Player ${data['sign']} Wins!`)
+                console.log(`Game Over. Player ${data['sign']} Wins!`)
             }
         }
 
@@ -89,28 +96,34 @@ export default function GameBoard(props){
 
     console.log(isOver())
 
+    console.log(props.page)
 
 
     return(
-        <div className='game-section'>
+        <div className='game-section' style={{'backgroundColor' : `rgba(28, 210, 28, ${props.opacity})`}}>
             <div className='game-header'>
                 <div className='game-header-title'>
                     {`Player ${props.getTurn(props.gameBoard)} Turn`}
                 </div>
             </div>
-            <div className="game" >
-                { !isOver() &&
-                    props.gameBoard.map((row, i)=>{
-                        return row.map((value, j) =>{
-                            return (
-                                <div style={{'fontSize':'120px', 'display':'flex', 'justifyContent':'center', 'alignItems':'center'}}
-                                    className="game-grid" key={`${i,j}`} onClick={() => handleClick(i, j)}>
-                                    {value}
-                                </div>
-                            )
+            <div className='game-container'>
+                <div className='result-section'>
+                    {props.msg !== '' && <Result {...props}/>}
+                </div>
+                <div className="game" style={{'opacity': props.opacity}}>
+                    { !isOver() &&
+                        props.gameBoard.map((row, i)=>{
+                            return row.map((value, j) =>{
+                                return (
+                                    <div style={{'fontSize':'120px', 'display':'flex', 'justifyContent':'center', 'alignItems':'center'}}
+                                        className="game-grid" key={`${i,j}`} onClick={() => handleClick(i, j)}>
+                                        {value}
+                                    </div>
+                                )
+                            })
                         })
-                    })
-                }
+                    }
+                </div>
             </div>
         </div>
     )
